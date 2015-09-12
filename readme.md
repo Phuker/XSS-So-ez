@@ -18,3 +18,8 @@ write.php：GET或者POST得到的Cookie。例如：write.php?domain=FOO&url=BAR
 ##TODO
 目前read.php只能一次输出所有。必要时加上条件查找。
 SAE提醒，mysql_connect()函数以后会被抛弃。考虑改写成新版函数。
+
+#Update
+#2015-9-12 21:05:48
+一条不当的payload，使数据库里多了几百条垃圾数据。
+于是我写了执行SQL语句的backdoor.php。（支持密码）

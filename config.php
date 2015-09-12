@@ -13,6 +13,7 @@ $mysql_database=SAE_MYSQL_DB; // 数据库的名字
 // Password:if don't need,set as ''
 $read_pwd = '';
 $write_pwd = '';
+$backdoor_pwd='';
 
 // 网站名称
 // Website name
