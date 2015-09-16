@@ -1,0 +1,21 @@
+@CHARSET "UTF-8";
+/*这是“天空蓝”配色*/
+body {
+	background-color: #99D9EA; /*body背景色*/
+}
+
+div {
+	background-color: #FFFFFF; /*div背景色*/
+}
+
+th {
+	background-color: #B5E61D; /*表头背景色*/
+}
+
+span.success {
+	background-color: #B5E61D; /*成功提示背景色*/
+}
+
+span.fail {
+	background-color: #FF8888; /*失败背景色*/
+}

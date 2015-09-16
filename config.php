@@ -1,19 +1,19 @@
 ﻿<?php
 // charset: UTF-8
 
-//Datebase 数据库
-//以下已配置为新浪云（SAE）可用。代码设计如此：此处将全局变量赋值给局部变量，可能降低性能。
-$mysql_server_name=SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT; //数据库服务器名称
-$mysql_username=SAE_MYSQL_USER; // 连接数据库用户名
-$mysql_password=SAE_MYSQL_PASS; // 连接数据库密码
-$mysql_database=SAE_MYSQL_DB; // 数据库的名字
-
-
+// Datebase 数据库
+// 以下已配置为新浪云（SAE）可用。代码设计如此：此处将全局变量赋值给局部变量，可能降低性能。
+$mysql_server_name = SAE_MYSQL_HOST_M . ':' . SAE_MYSQL_PORT; // 数据库服务器名称
+$mysql_username = SAE_MYSQL_USER; // 连接数据库用户名
+$mysql_password = SAE_MYSQL_PASS; // 连接数据库密码
+$mysql_database = SAE_MYSQL_DB; // 数据库的名字
+                              
 // 密码（不需要请留空：''）
-// Password:if don't need,set as ''
+                              // Password:if don't need,set as ''
 $read_pwd = '';
 $write_pwd = '';
-$backdoor_pwd='';
+$backdoor_pwd = '';
+$color_pwd = ''; //改变网站配色
 
 // 网站名称
 // Website name
