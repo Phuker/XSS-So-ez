@@ -40,7 +40,7 @@ div.showcolor {
 	width: 2em;
 	height: 1em;
 	margin: 0px;
-	padding: 0px;
+	padding: 0 0 0.15em 0;
 	display: inline-block;
 }
 
@@ -72,7 +72,7 @@ div.showcolor {
 		}
 		</script>
 		<form action="color.php?pwd=<?php echo filter($_GET['pwd'])?>"
-			id="formColor" onsubmit="checkColor()" method="post">
+			id="formColor" onsubmit="return checkColor()" method="post">
 			<label for="color_black">
 				<div style="background-color: #000000" class="showcolor">
 					<input type="radio" name="color" id="color_black" value="black" />
@@ -104,58 +104,66 @@ div.showcolor {
 			</label><br /> <input type="submit" value="确定" />
 		</form>
 		<?php
-		if ($_POST ['color'] === '') {
-			echo '<span class="fail">请选择颜色</span><br />';
-		} else {
-			// 这样写有点笨，但是省事就这样了
-			$css_black = 'body {background-color: #393939;color:#FFFFFF;}div {background-color: #000000;}
+		if ($_SERVER ['REQUEST_METHOD'] === 'POST') {
+			if ($_POST ['color'] == '') {
+				echo '<span class="fail">请选择颜色</span><br />';
+			} else {
+				// 这样写有点笨，但是省事就这样了
+				$css_black = 'body {background-color: #393939;color:#FFFFFF;}div {background-color: #000000;}
 		th {background-color: #FF5A09;}span.success {background-color: #003300;}
 		span.fail {background-color: #330000;}';
-			$css_green = 'body {background-color: #336600;}div {background-color: #99CC33;}
+				$css_green = 'body {background-color: #336600;}div {background-color: #99CC33;}
 		th {background-color: #FFFF66;}span.success {background-color: #99CC00;}
 		span.fail {background-color: #FF6666;}';
-			$css_blue = 'body {background-color: #99D9EA;}div {background-color: #FFFFFF;}
+				$css_blue = 'body {background-color: #99D9EA;}div {background-color: #FFFFFF;}
 		th {background-color: #B5E61D;}span.success {background-color: #B5E61D;}
 		span.fail {background-color: #FF8888;}';
-			$css_yellow = 'body {background-color: #FFCC33;}div {background-color: #FFFF33;}
+				$css_yellow = 'body {background-color: #FFCC33;}div {background-color: #FFFF33;}
 		th {background-color: #99CCFF;}span.success {background-color: #66CC00;}
 		span.fail {background-color: #FF6666;}';
-			$css_pink = 'body {background-color: #FFAEC9;}div {background-color: #FFCCCC;}
+				$css_pink = 'body {background-color: #FFAEC9;}div {background-color: #FFCCCC;}
 		th {background-color: #9933CC;}span.success {background-color: #B5E61D;}
 		span.fail {background-color: #FF8888;}';
-			$css_red = 'body {background-color: #CC0000;}div {background-color: #FF9999;}
+				$css_red = 'body {background-color: #CC0000;}div {background-color: #FF9999;}
 		th {background-color: #66CC00;}span.success {background-color: #66CC00;}
 		span.fail {background-color: #FF6666;}';
-			$css_purple = 'body {background-color: #330033;}div {background-color: #C0AACC;}
+				$css_purple = 'body {background-color: #330033;}div {background-color: #C0AACC;}
 		th {background-color: #AA99FF;}span.success {background-color: #66CC99;}
 		span.fail {background-color: #CC33AA;}';
-			
-			$cmd = '';
-			switch ($_POST ['color']) {
-				case 'black' :
-					$cmd = 'echo "' . $css_black . '" > color.css';
-					break;
-				case 'green' :
-					$cmd = 'echo "' . $css_green . '" > color.css';
-					break;
-				case 'blue' :
-					$cmd = 'echo "' . $css_blue . '" > color.css';
-					break;
-				case 'pink' :
-					$cmd = 'echo "' . $css_pink . '" > color.css';
-					break;
-				case 'yellow' :
-					$cmd = 'echo "' . $css_yellow . '" > color.css';
-					break;
-				case 'red' :
-					$cmd = 'echo "' . $css_red . '" > color.css';
-					break;
-				case 'purple' :
-					$cmd = 'echo "' . $css_purple . '" > color.css';
-					break;
+				
+				$cmd = '';
+				switch ($_POST ['color']) {
+					case 'black' :
+						$cmd = $css_black;
+						break;
+					case 'green' :
+						$cmd = $css_green;
+						break;
+					case 'blue' :
+						$cmd = $css_blue;
+						break;
+					case 'pink' :
+						$cmd = $css_pink;
+						break;
+					case 'yellow' :
+						$cmd = $css_yellow;
+						break;
+					case 'red' :
+						$cmd = $css_red;
+						break;
+					case 'purple' :
+						$cmd = $css_purple;
+						break;
+				}
+				
+				$f = fopen ( "color.css", "w" );
+				if ($f === false) {
+					echo '打开文件失败<br />';
+				} else {
+					fwrite ( $f, $cmd );
+					fclose ( $f );
+				}
 			}
-			
-			$rtn = exec ( $cmd );
 		}
 		?>
 		<p>
