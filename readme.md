@@ -16,8 +16,7 @@ write.php：GET或者POST得到的Cookie。例如：write.php?domain=FOO&url=BAR
 自定义开发者信息（底部显示）
 
 ##TODO
-目前read.php只能一次输出所有。必要时加上条件查找。
-SAE提醒，mysql_connect()函数以后会被抛弃。考虑改写成新版函数。
+PHP提醒，mysql_connect()函数以后会被抛弃。考虑改写成新版函数。
 
 ##Update
 ###2015-9-12 21:05:48
@@ -32,3 +31,13 @@ SAE提醒，mysql_connect()函数以后会被抛弃。考虑改写成新版函�
 由于空字符串在if语句中效果同false，因此system()返回最后一行为空时应使用if($foo !== FALSE)。其他情况同理。
 改变字体为等宽字体。个别地方，中文使用微软雅黑。
 使用Eclipse排版一下。其他一些细节调整优化。
+
+###2015-9-16 22:25:33
+CSS文件已改为PHP文件读写。
+在Windows上运行系统命令时输出字符集为GBK，增加自动转换为UTF-8。
+
+###2015-9-21 21:26:59
+密码验证方式由GET改为POST，并增加install和testMySql页面密码功能
+分离出CSS文件，并移动到style/main.css
+增加read.php条件查询
+

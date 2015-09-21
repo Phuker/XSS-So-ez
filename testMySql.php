@@ -1,5 +1,30 @@
 ﻿﻿<?php
 require_once ('config.php');
+
+if ($testMySql_pwd != '') {
+	if (! isset ( $_POST ['pwd'] ) or  $_POST ['pwd'] != $testMySql_pwd) {
+		die ( '<!doctype html>
+<html>
+<head>
+<title>测试MySQL连接_' . $website_name . '</title>
+<meta charset="utf-8" />
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="style/color.css" />
+<link rel="stylesheet" type="text/css" href="style/main.css" />
+</head>
+<body>
+	<div class="select">
+		<h1>请输入密码</h1>
+		<form action="testMySql.php" method="POST">
+			<input type="password" class="cmd" id="input_cmd" name="pwd" value="" autofocus="autofocus" />
+			<input type="submit" value="确定" />
+		</form>
+	</div>
+</body>
+</html>' );
+	}
+}
+
 function test() {
 	global $mysql_server_name, $mysql_username, $mysql_password;
 	$result = "";
@@ -23,30 +48,9 @@ function test() {
 <meta charset="utf-8" />
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="stylesheet" type="text/css" href="color.css" />
-<style type="text/css">
-body {
-	margin: 0;
-	padding: 0;
-	font-family: Consolas,Monaco,Courier,Monospace;
-}
+<link rel="stylesheet" type="text/css" href="style/color.css" />
+<link rel="stylesheet" type="text/css" href="style/main.css" />
 
-div {
-	width: 800px;
-	margin: 5em auto;
-	padding: 50px;
-	border-radius: 1em;
-}
-
-@media ( max-width : 700px) {
-	div {
-		width: auto;
-		margin: 0 auto;
-		border-radius: 0;
-		padding: 1em;
-	}
-}
-</style>
 </head>
 
 <body>

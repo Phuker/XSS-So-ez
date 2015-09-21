@@ -8,10 +8,11 @@ function filter($str) {
 }
 
 require_once ('config.php');
-require_once ('db.php');
 if ($write_pwd != '' && $_REQUEST ['pwd'] != $write_pwd) {
 	die ( 'Who are you? Password requierd.' );
 }
+require_once ('db.php');
+
 
 if (isset ( $_REQUEST ['domain'] ) && isset ( $_REQUEST ['url'] ) && isset ( $_REQUEST ['cookie'] ) && trim ( $_REQUEST ['domain'] ) != '' && trim ( $_REQUEST ['url'] ) != '') {
 	$domain = filter ( $_REQUEST ['domain'] );

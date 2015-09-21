@@ -1,41 +1,44 @@
-<?php require_once('config.php'); require_once('db.php');?>
+<?php
+require_once('config.php');
+if ($install_pwd != '') {
+	if (! isset ( $_POST ['pwd'] ) or  $_POST ['pwd'] != $install_pwd) {
+		die ( '<!doctype html>
+<html>
+<head>
+<title>建立数据库_' . $website_name . '</title>
+<meta charset="utf-8" />
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="style/color.css" />
+<link rel="stylesheet" type="text/css" href="style/main.css" />
+</head>
+<body>
+	<div class="select">
+		<h1>请输入密码</h1>
+		<form action="install.php" method="POST">
+			<input type="password" class="cmd" id="input_cmd" name="pwd" value="" autofocus="autofocus" />
+			<input type="submit" value="确定" />
+		</form>
+	</div>
+</body>
+</html>' );
+	}
+}
+function filter($str) {
+	// 转义为HTML Entity
+	$str = trim ( htmlspecialchars ( $str, ENT_QUOTES ) );
+	$str = str_replace ( '\\', '&#92;', $str );
+	$str = str_replace ( '/', '&#47;', $str );
+	return $str;
+}
+require_once('db.php');?>
 <!doctype html>
 <html>
 <head>
 <title>建立数据库_<?php echo $website_name; ?></title>
 <meta charset="utf-8" />
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="color.css" />
-<style type="text/css">
-body {
-	margin: 0;
-	padding: 0;
-	font-family: Consolas,Monaco,Courier,Monospace;
-}
-
-div.select {
-	padding: 50px;
-	width: 800px;
-	margin: 3em auto 1em auto;
-	border-radius: 1em;
-}
-
-div.console {
-	font-family: Consolas,"Microsoft YaHei",Monaco,Courier,Monospace;
-	padding: 20px;
-	margin: 1em 2em auto 2em;
-	//
-	上右下左
-}
-
-form {
-	border-color: #000000;
-	border-width: 1px;
-	border-style: dashed;
-	margin: 0 3em 0 3em;
-	padding: 1em;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="style/color.css" />
+<link rel="stylesheet" type="text/css" href="style/main.css" />
 </head>
 
 <body>
@@ -43,7 +46,8 @@ form {
 		<h1>请选择建立数据库项目</h1>
 		<p>配置文件为config.php。默认选项认为已经建立了名为“<?php echo($mysql_database);?>”的数据库。
 	如果没有，请选择先建立数据库，然后建立表。 </p>
-		<form action="install.php" method="post">
+		<form action="install.php" method="post" class="withBorder">
+			<input type="hidden" name="pwd" value="<?php echo filter($_POST ['pwd']);?>">
 			<input type="radio" name="type" value="both" />
 		建立“<?php echo($mysql_database);?>”数据库，并建立表<br /> <input type="radio"
 				name="type" value="db" />
@@ -102,14 +106,17 @@ primary key (id)
 	}
 }
 
-if ($_POST ['type'] == 'both') {
-	createDb ();
-	createTable ();
-} elseif ($_POST ['type'] == 'db') {
-	createDb ();
-} elseif ($_POST ['type'] == 'table') {
-	createTable ();
-} else {
+if(isset($_POST['type'])){
+	if ($_POST ['type'] == 'both') {
+		createDb ();
+		createTable ();
+	} elseif ($_POST ['type'] == 'db') {
+		createDb ();
+	} elseif ($_POST ['type'] == 'table') {
+		createTable ();
+	}
+}
+ else {
 	echo '等待命令。<br />';
 }
 ?>

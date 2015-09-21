@@ -7,31 +7,8 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="stylesheet" type="text/css" href="color.css" />
-<style type="text/css">
-body {
-	margin: 0;
-	padding: 0;
-	font-family: Consolas,Monaco,Courier,Monospace;
-}
-
-div {
-	width: 800px;
-	margin: 5em auto;
-	padding: 50px;
-	border-radius: 1em;
-}
-
-/*浏览器宽度小于700px*/
-@media ( max-width : 700px) {
-	div {
-		width: auto;
-		margin: 0 auto;
-		border-radius: 0;
-		padding: 1em;
-	}
-}
-</style>
+<link rel="stylesheet" type="text/css" href="style/color.css" />
+<link rel="stylesheet" type="text/css" href="style/main.css" />
 </head>
 
 <body>
@@ -53,7 +30,9 @@ div {
 			<b>读取方法</b>：<a href="read.php" target="_blank"><b>read.php</b></a>
 		</p>
 		<p>如果设置了密码，请在URL中附加query string：pwd=YOURPASSWORD</p>
-		<p>修改网站配色<a href="color.php" target="_blank">color.php</a></p>
+		<p>
+			修改网站配色<a href="color.php" target="_blank">color.php</a>
+		</p>
 		<p><?php echo $dev_info;?></p>
 	</div>
 </body>

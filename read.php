@@ -1,9 +1,36 @@
 ﻿﻿<?php
 require_once ('config.php');
-require_once ('db.php');
-if ($read_pwd != '' && $_GET ['pwd'] != $read_pwd) {
-	die ( 'Who are you? Password requierd.' );
+if ($read_pwd != '') {
+	if (! isset ( $_POST ['pwd'] ) or $_POST ['pwd'] != $read_pwd) {
+		die ( '<!doctype html>
+<html>
+<head>
+<title>读取数据库_' . $website_name . '</title>
+<meta charset="utf-8" />
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="style/color.css" />
+<link rel="stylesheet" type="text/css" href="style/main.css" />
+</head>
+<body>
+	<div class="select">
+		<h1>请输入密码</h1>
+		<form action="read.php" method="POST">
+			<input type="password" class="cmd" id="input_cmd" name="pwd" value="" autofocus="autofocus" />
+			<input type="submit" value="确定" />
+		</form>
+	</div>
+</body>
+</html>' );
+	}
 }
+function filter($str) {
+	// 转义为HTML Entity
+	$str = trim ( htmlspecialchars ( $str, ENT_QUOTES ) );
+	$str = str_replace ( '\\', '&#92;', $str );
+	$str = str_replace ( '/', '&#47;', $str );
+	return $str;
+}
+require_once ('db.php');
 ?>
 <!doctype html>
 <html>
@@ -12,43 +39,70 @@ if ($read_pwd != '' && $_GET ['pwd'] != $read_pwd) {
 
 <meta charset="utf-8" />
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="color.css" />
-<style type="text/css">
-body {
-	margin: 0;
-	padding: 0;
-	font-family: Consolas,Monaco,Courier,Monospace;
-}
-
-div {
-	padding: 20px 30px 20px 30px;
-	margin: 1em 0.5em 1em 0.5em;
-	border-radius: 1em;
-	min-height: 75%; /*数据不足撑起页面*/
-}
-/*吐槽：搞这个表格真是费劲。今天学习不少CSS，还加了一个switch...case...，坑爹。*/
-th {
-	word-break: normal; /*表头不换行*/
-}
-
-td {
-	border-style: solid;
-	border-width: 1px;
-}
-
-table {
-    font-family: Consolas,"Microsoft YaHei",Monaco,Courier,Monospace;
-	border-style: solid;
-	border-width: 1px;
-	word-wrap: break-word;
-	min-width: 100%;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="style/color.css" />
+<link rel="stylesheet" type="text/css" href="style/main.css" />
 </head>
 
 <body>
-	<div>
+	<div class="datatable">
 		<h1>数据库内容</h1>
+		<form action="read.php" method="post" class="withBorder">
+			<input type="hidden" name="pwd"
+				value="<?php echo filter($_POST ['pwd']);?>"> <input type="reset"
+				value="撤销" />&nbsp;
+			<button
+				onclick="var inputs = document.getElementsByTagName('input');for(var i =0;i<inputs.length;i++){if(inputs[i].type== 'text' || inputs[i].type=='datetime-local' || inputs[i].type=='number'){inputs[i].value='';
+}}document.getElementById('criteria_id').style.display='none';document.getElementById('criteria_time').style.display='none';document.getElementById('criteria_domain').style.display='none';">清空</button>
+			<br /> ID<input type="checkbox" name="criteria[]" value="id"
+				<?php if(isset($_POST['criteria']) and in_array('id', $_POST['criteria'])){echo 'checked="checked"';}?>
+				onchange="var d=document.getElementById('criteria_id'); if(this.checked){d.style.display='inline';}else{d.style.display='none';}" />
+			<div id="criteria_id" class="inline" style="display: <?php if(isset($_POST['criteria']) and in_array('id', $_POST['criteria'])){echo 'inline';}else{echo 'none';}?>; ">
+				等于：<input type="number" name="id_equal" style="width: 6em;"
+					value="<?php if (isset($_POST['id_equal'])) {echo filter($_POST['id_equal']);}?>" />
+				大于：<input type="number" name="id_greater" style="width: 6em;"
+					value="<?php if(isset($_POST['id_greater'])){echo filter($_POST['id_greater']);}?>" />
+				小于：<input type="number" name="id_less" style="width: 6em;"
+					value="<?php if(isset($_POST['id_less'])){echo filter($_POST['id_less']);}?>" />
+				大于等于：<input type="number" name="id_greater_equal"
+					style="width: 6em;"
+					value="<?php if(isset($_POST['id_greater_equal'])){echo filter($_POST['id_greater_equal']);}?>" />
+				小于等于：<input type="number" name="id_less_equal" style="width: 6em;"
+					value="<?php if(isset($_POST['id_less_equal'])){echo filter($_POST['id_less_equal']);}?>" />
+			</div>
+			<br /> 时间<input type="checkbox" name="criteria[]" value="time"
+				<?php if(isset($_POST['criteria']) and in_array('time', $_POST['criteria'])){echo 'checked="checked"';}?>
+				onchange="var d=document.getElementById('criteria_time'); if(this.checked){d.style.display='inline';}else{d.style.display='none';}" />
+			<div id="criteria_time" class="inline" style="display: <?php if(isset($_POST['criteria']) and in_array('time', $_POST['criteria'])){echo 'inline';}else{echo 'none';}?>;">
+				<input type="datetime-local" name="time_greater_equal"
+					value="<?php
+					
+					if (isset ( $_POST ['time_greater_equal'] )) {
+						echo filter ( $_POST ['time_greater_equal'] );
+					} else {
+						echo '2015-01-01T12:00:00';
+					}
+					?>" /> ~ <input type="datetime-local" name="time_less_equal"
+					value=<?php
+					
+					if (isset ( $_POST ['time_less_equal'] )) {
+						echo filter ( $_POST ['time_less_equal'] );
+					} else {
+						date_default_timezone_set ( 'Asia/Shanghai' );
+						$time = date ( 'Y-m-d H:i:s' );
+						$time [10] = 'T';
+						echo $time;
+					}
+					?> />
+			</div>
+			<br /> 域名<input type="checkbox" name="criteria[]" value="domain"
+				<?php if(isset($_POST['criteria']) and in_array('domain', $_POST['criteria'])){echo 'checked="checked"';}?>
+				onchange="var d=document.getElementById('criteria_domain'); if(this.checked){d.style.display='inline';}else{d.style.display='none';}" />
+			<div id="criteria_domain" class="inline" style="display: <?php if(isset($_POST['criteria']) and in_array('domain', $_POST['criteria'])){echo 'inline';}else{echo 'none';}?>;">
+				<input type="text" name="domain" style="width: 30em;"
+					value="<?php if(isset($_POST['domain'])){echo filter($_POST['domain']);}?>" />
+			</div>
+			<br /> <input type="submit" value="确定" />
+		</form>
 <?php
 require_once ('config.php');
 require_once ('db.php');
@@ -102,9 +156,64 @@ function show_table_info($result) {
 	// 释放资源
 	mysql_free_result ( $result );
 }
-
+function getWhereStr() {
+	if (! isset ( $_POST ['criteria'] )) {
+		return '';
+	}
+	// 条件查询。不知道有没有更简洁的写法。
+	$where = '';
+	
+	// 数组：array (size=2) 0 => string 'id' (length=2) 1 => string 'domain' (length=6)
+	$cri = $_POST ['criteria'];
+	if (count ( $cri ) > 0) {
+		if (in_array ( 'id', $cri )) {
+			if (trim ( $_POST ['id_equal'] != '' )) {
+				$where .= " and id = '" . filter ( $_POST ['id_equal'] ) . "'";
+			}
+			if (trim ( $_POST ['id_greater'] != '' )) {
+				$where .= " and id > '" . filter ( $_POST ['id_greater'] ) . "'";
+			}
+			if (trim ( $_POST ['id_less'] != '' )) {
+				$where .= " and id < '" . filter ( $_POST ['id_less'] ) . "'";
+			}
+			if (trim ( $_POST ['id_greater_equal'] != '' )) {
+				$where .= " and id >= '" . filter ( $_POST ['id_greater_equal'] ) . "'";
+			}
+			if (trim ( $_POST ['id_less_equal'] != '' )) {
+				$where .= " and id <= '" . filter ( $_POST ['id_less_equal'] ) . "'";
+			}
+		}
+		
+		if (in_array ( 'time', $cri )) {
+			if (trim ( $_POST ['time_greater_equal'] ) != '') {
+				$t = filter ( $_POST ['time_greater_equal'] ); // 用HTML5 datetime-local 获取到的，日期和时间中间有一个T。要换成空格
+				$t [10] = ' ';
+				$where .= " and time >= '" . $t . "'";
+			}
+			if (trim ( $_POST ['time_less_equal'] ) != '') {
+				$t = filter ( $_POST ['time_less_equal'] );
+				$t [10] = ' ';
+				$where .= " and time <= '" . $t . "'";
+			}
+		}
+		
+		if (in_array ( 'domain', $cri ) and trim ( $_POST ['domain'] ) != '') {
+			$where .= " and domain = '" . filter ( $_POST ['domain'] ) . "'";
+		}
+	}
+	
+	if ($where != '') {
+		$where = ' where' . substr ( $where, 4 );
+	}
+	return $where;
+}
 // 从表中提取信息的sql语句
-$sql = "SELECT * FROM `info`";
+// var_dump(getWhereStr());
+// var_dump($_POST['criteria']);
+
+$sql = "SELECT * FROM `info`" . getWhereStr ();
+echo '执行的SQL语句为：' . $sql . '<br /><hr />';
+
 // 执行sql查询
 $result = mysql_query ( $sql );
 if ($result !== false) {
@@ -116,7 +225,10 @@ if ($result !== false) {
 	echo '<span class="fail">执行SQL失败，错误信息：' . mysql_error () . '</span><br/>';
 }
 ?>
-<?php echo '<p>'.$dev_info.'</p>';?>
-</div>
+<p>
+			<a href="testMySql.php" target="_blank">测试数据库连接</a>&nbsp; <a
+				href="index.php">返回首页</a><br />
+<?php echo $dev_info;?></p>
+	</div>
 </body>
 </html>

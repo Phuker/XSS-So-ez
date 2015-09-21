@@ -1,9 +1,30 @@
 <?php
 require_once ('config.php');
-require_once ('db.php');
-if ($color_pwd != '' && $_GET ['pwd'] != $color_pwd) {
-	die ( 'Who are you? Password requierd.' );
+if ($color_pwd != '') {
+	if (! isset ( $_POST ['pwd'] ) or  $_POST ['pwd'] != $color_pwd) {
+		die ( '<!doctype html>
+<html>
+<head>
+<title>修改配色_' . $website_name . '</title>
+<meta charset="utf-8" />
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="style/color.css" />
+<link rel="stylesheet" type="text/css" href="style/main.css" />
+</head>
+<body>
+	<div class="select">
+		<h1>请输入密码</h1>
+			<form action="color.php" method="POST">
+			<input type="password" class="cmd" id="input_cmd" name="pwd" value="" autofocus="autofocus" />
+			<input type="submit" value="确定" />
+		</form>
+	</div>
+</body>
+</html>' );
+	}
 }
+require_once ('db.php');
+
 function filter($str) {
 	// 转义为HTML Entity
 	$str = trim ( htmlspecialchars ( $str, ENT_QUOTES ) );
@@ -20,39 +41,10 @@ function filter($str) {
 <meta charset="utf-8" />
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+
 <link rel="stylesheet" type="text/css"
-	href="color.css<?php echo '?time='. time();?>" />
-<style type="text/css">
-body {
-	margin: 0;
-	padding: 0;
-	font-family: Consolas, Monaco, Courier, Monospace;
-}
-
-div {
-	width: 800px;
-	margin: 5em auto;
-	padding: 50px;
-	border-radius: 1em;
-}
-
-div.showcolor {
-	width: 2em;
-	height: 1em;
-	margin: 0px;
-	padding: 0 0 0.15em 0;
-	display: inline-block;
-}
-
-@media ( max-width : 700px) {
-	div {
-		width: auto;
-		margin: 0 auto;
-		border-radius: 0;
-		padding: 1em;
-	}
-}
-</style>
+	href="style/color.css<?php echo '?time='. time();?>" />
+<link rel="stylesheet" type="text/css" href="style/main.css" />
 </head>
 
 <body>
@@ -71,8 +63,10 @@ div.showcolor {
 			}
 		}
 		</script>
-		<form action="color.php?pwd=<?php echo filter($_GET['pwd'])?>"
+		<form
+			action="color.php<?php if(isset($_GET['pwd'])){echo '?pwd='. filter($_GET['pwd']);}?>"
 			id="formColor" onsubmit="return checkColor()" method="post">
+			<input type="hidden" name="pwd" value="<?php echo filter($_POST ['pwd']);?>">
 			<label for="color_black">
 				<div style="background-color: #000000" class="showcolor">
 					<input type="radio" name="color" id="color_black" value="black" />
@@ -105,11 +99,11 @@ div.showcolor {
 		</form>
 		<?php
 		if ($_SERVER ['REQUEST_METHOD'] === 'POST') {
-			if ($_POST ['color'] == '') {
+			if (!isset($_POST['color']) or $_POST ['color'] == '') {
 				echo '<span class="fail">请选择颜色</span><br />';
 			} else {
 				// 这样写有点笨，但是省事就这样了
-				$css_black = 'body {background-color: #393939;color:#FFFFFF;}div {background-color: #000000;}
+				$css_black = 'body {background-color: #393939;color:#CCCCCC;}div {background-color: #000000;}
 		th {background-color: #FF5A09;}span.success {background-color: #003300;}
 		span.fail {background-color: #330000;}';
 				$css_green = 'body {background-color: #336600;}div {background-color: #99CC33;}
@@ -156,7 +150,7 @@ div.showcolor {
 						break;
 				}
 				
-				$f = fopen ( "color.css", "w" );
+				$f = fopen ( "style/color.css", "w" );
 				if ($f === false) {
 					echo '打开文件失败<br />';
 				} else {

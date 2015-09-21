@@ -14,6 +14,8 @@ $read_pwd = '';
 $write_pwd = '';
 $backdoor_pwd = '';
 $color_pwd = ''; //改变网站配色
+$install_pwd = '';
+$testMySql_pwd = '';
 
 // 网站名称
 // Website name
