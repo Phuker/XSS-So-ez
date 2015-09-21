@@ -1,4 +1,4 @@
-body {
+﻿body {
 	margin: 0;
 	padding: 0;
 	font-family: Consolas, Monaco, Courier, Monospace;
@@ -34,7 +34,7 @@ div.console {
 	font-family: Consolas, "Microsoft YaHei", Monaco, Courier, Monospace;
 	padding: 20px;
 	margin: 1em 2em auto 2em;
-	width: initial;
+	width: auto;
 	/*上右下左*/
 	border-radius: 0;
 }
@@ -52,15 +52,15 @@ div.datatable {
 	margin: 1em 0.5em 1em 0.5em;
 	border-radius: 1em;
 	min-height: 75%; /*数据不足撑起页面*/
-	width: initial;
+	width: auto;
 }
 
 div.inline{
-	width: initial;
+	width: auto;
 	margin: 0;
 	padding: 0;
 	border-radius: 0;
-	word-wrap: initial;
+	word-wrap: normal;
 }
 
 form.withBorder {
