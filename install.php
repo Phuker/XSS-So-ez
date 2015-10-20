@@ -82,8 +82,10 @@ function createTable() {
 id int(10) unsigned NOT NULL AUTO_INCREMENT,
 time datetime NOT NULL,
 domain nvarchar(50) NOT NULL,
-url longtext NOT NULL,
+location longtext NULL,
+toplocation longtext NULL,
 cookie longtext NULL,
+opener longtext NULL,
 primary key (id)
 );';
 	/*

