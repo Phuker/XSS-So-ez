@@ -101,7 +101,10 @@ require_once ('db.php');
 				<input type="text" name="domain" style="width: 30em;"
 					value="<?php if(isset($_POST['domain'])){echo filter($_POST['domain']);}?>" />
 			</div>
-			<br /> <input type="submit" value="确定" />
+			<br /><b>不使用</b>按id（时间）降序排序<input type="checkbox" name="no_order" value="true"
+			<?php if(isset($_POST['no_order']) && $_POST['no_order']==="true"){echo 'checked="checked"'; $orderby='';}
+			else {$orderby = ' ORDER BY id DESC';}?> />
+			<br /><input type="submit" value="确定" />
 		</form>
 <?php
 require_once ('config.php');
@@ -211,7 +214,7 @@ function getWhereStr() {
 // var_dump(getWhereStr());
 // var_dump($_POST['criteria']);
 
-$sql = "SELECT * FROM `info`" . getWhereStr ();
+$sql = 'SELECT * FROM `info`' . getWhereStr () . $orderby;
 echo '执行的SQL语句为：' . $sql . '<br /><hr />';
 
 // 执行sql查询
