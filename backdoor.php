@@ -44,7 +44,7 @@ function filter($str) {
 <link rel="stylesheet" type="text/css" href="style/main.css" />
 </head>
 
-<body>
+<body onload="document.getElementById('input_cmd').select()">
 	<div class="select">
 		<h1>执行命令</h1>
 		<script type="text/javascript">
@@ -66,15 +66,8 @@ function filter($str) {
 				id="type_system" name="type" value="system" onclick="setFocus()"
 				<?php if(isset($_POST['type']) && $_POST['type'] == 'system'){echo 'checked="checked"';}?> />系统命令
 			</label> <br /> <input type="text" class="cmd" id="input_cmd"
-				name="cmd"
-				value="<?php
-				if (! isset ( $_POST ['type'] ) || $_POST ['type'] == '') {
-					if (isset ( $_POST ['cmd'] )) {
-						echo filter ( $_POST ['cmd'] );
-					}
-				}
-				?>"
-				autofocus="autofocus" /> <input type="submit" value="确定" />
+				name="cmd" value="<?php if (isset ( $_POST ['cmd'] )) {echo filter ( $_POST ['cmd'] );}?>"/>
+				<input type="submit" value="确定" />
 		</form>
 	</div>
 	<hr />
