@@ -222,6 +222,7 @@ $result = mysql_query ( $sql );
 if ($result !== false) {
 	// SELECT，SHOW，DESCRIBE, EXPLAIN 等 结果显示（测试可以）
 	if (gettype ( $result ) == 'resource') {
+		echo '为便于阅读，location等已被解码，再次使用请编码：& => %26, + => %2b<br />';
 		show_table_info ( $result );
 	}
 } else {

