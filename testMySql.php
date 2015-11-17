@@ -32,7 +32,7 @@ function test() {
 	// 连接到数据库
 	$conn = mysql_connect ( $mysql_server_name, $mysql_username, $mysql_password );
 	if ($conn === false) {
-		$result = '<span class="success">Could not connect: ' . mysql_error () . '</span>';
+		$result = '<span class="fail">Could not connect: ' . mysql_error () . '</span>';
 	} else {
 		$result = '<span class="success">Connect to MySQL succeed!<br />成功连接到数据库！</span>';
 		mysql_close ( $conn );
