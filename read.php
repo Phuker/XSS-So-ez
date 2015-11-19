@@ -105,7 +105,8 @@ require_once ('db.php');
 			<?php if(isset($_POST['no_order']) && $_POST['no_order']==="true"){echo 'checked="checked"'; $orderby='';}
 			else {$orderby = ' ORDER BY id DESC';}?> />
 			<br /><input type="submit" value="确定" />
-		</form>
+			<hr/>
+		
 <?php
 require_once ('config.php');
 require_once ('db.php');
@@ -122,34 +123,27 @@ function show_table_info($result) {
 		echo '<th>' . mysql_field_name ( $result, $i );
 		echo '</th>';
 	}
-	echo "</tr>\n";
+	echo "<th>操作</th></tr>\n";
 	
-	// 定位到第一条记录： bool mysql_data_seek ( resource $result , int $row_number )
-	// 将指定的结果标识所关联的 MySQL 结果内部的行指针移动到指定的行号。接着调用 mysql_fetch_row() 将返回那一行。
-	// mysql_data_seek($result, 0);
-	
-	// 循环取出记录
+	// 循环取出
 	while ( $row = mysql_fetch_row ( $result ) ) {
 		echo "<tr>";
 		for($i = 0; $i < mysql_num_fields ( $result ); $i ++) {
 			switch ($i) {
 				case 0 : // id
-					echo '<td style="word-break: keep-all;">';
-					break;
 				case 1 : // time
-					echo '<td style="word-break: keep-all;">';
-					break;
 				case 2 : // domain
 					echo '<td style="word-break: keep-all;">';
 					break;
-				default :
-					echo '<td style="word-break: break-all;">';
+				default : // others
+					echo '<td style="word-break: break-all;font-size: xx-small;">';
 					break;
 			}
 			// echo '<td>';
 			echo $row [$i];
 			echo '</td>';
 		}
+		echo '<td><button type="submit" value="'.$row[0].'" name="delete">删除</button></td>';
 		echo "</tr>\n";
 	}
 	
@@ -210,12 +204,23 @@ function getWhereStr() {
 	}
 	return $where;
 }
-// 从表中提取信息的sql语句
-// var_dump(getWhereStr());
-// var_dump($_POST['criteria']);
 
+// 删除操作
+if(isset($_POST['delete']) and !empty($_POST['delete']) and ctype_digit($_POST['delete'])){
+	$sql = 'DELETE FROM info WHERE id = '. $_POST['delete'];
+	if(mysql_query($sql)){
+		echo '<span class="success">执行了删除id为' . $_POST['delete']. '的数据，删除了' . mysql_affected_rows() . '行数据</span><br />';
+		echo '执行的SQL 语句为：'.$sql.'<br />';
+	}
+	else{
+		echo '<span class="fail">删除失败，错误信息为：'. mysql_error() .'</span>';
+	}
+	echo '<hr />';
+}
+
+//查询输出表格
 $sql = 'SELECT * FROM `info`' . getWhereStr () . $orderby;
-echo '执行的SQL语句为：' . $sql . '<br /><hr />';
+echo '执行的SQL语句为：' . $sql . '<br />';
 
 // 执行sql查询
 $result = mysql_query ( $sql );
@@ -229,6 +234,7 @@ if ($result !== false) {
 	echo '<span class="fail">执行SQL失败，错误信息：' . mysql_error () . '</span><br/>';
 }
 ?>
+</form>
 <p>
 			<a href="testMySql.php" target="_blank">测试数据库连接</a>&nbsp; <a
 				href="index.php">返回首页</a><br />
