@@ -6,7 +6,8 @@
 ##使用方法
 ###安装配置
 1. 配置`config.php`，填写数据库用户名、密码等信息。  
-2. 访问`install.php`：创建数据库、表等操作。
+2. 访问`install.php`：创建数据库、表等操作。  
+
 ###使用  
 通过`write.php`，GET或者POST方法传输获取到的Cookie。  
 可供提交的参数为`domain location toplocation cookie opener`。其中`domain`必填。  
