@@ -41,6 +41,17 @@ require_once ('db.php');
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="style/color.css" />
 <link rel="stylesheet" type="text/css" href="style/main.css" />
+<style type="text/css">
+	.bs{
+		/*break small*/
+		word-break: break-all;
+		font-size: xx-small;
+	}
+	.kn{
+		/*keep normal-size*/
+		word-break: keep-all;
+	}
+</style>
 </head>
 
 <body>
@@ -114,7 +125,7 @@ require_once ('db.php');
 // info表专用
 function show_table_info($result) {
 	// Make sure that $result != False
-	echo '共查询到 ' . mysql_num_rows ( $result ) . ' 条记录<br />';
+	echo '共查询到 ' . mysql_num_rows ( $result ) . ' 条记录<br />'."\n";
 	echo "<table>\n";
 	// 显示字段名称
 	echo '<tr>';
@@ -133,18 +144,24 @@ function show_table_info($result) {
 				case 0 : // id
 				case 1 : // time
 				case 2 : // domain
-					echo '<td style="word-break: keep-all;">';
+					echo '<td class="kn">';
+					break;
+				case 3:
+				case 4:
+				case 5:
+				case 6:
+					echo '<td class="bs">';
 					break;
 				default : // others
-					echo '<td style="word-break: break-all;font-size: xx-small;">';
+					echo '<td>';
 					break;
 			}
 			// echo '<td>';
 			echo $row [$i];
-			echo '</td>';
+			echo "</td>\n";
 		}
-		echo '<td><button type="submit" value="'.$row[0].'" name="delete">删除</button></td>';
-		echo "</tr>\n";
+		echo '<td class="kn"><button type="submit" value="'.$row[0].'" name="delete">删除</button></td>'."\n";
+		echo "</tr>\n\n";
 	}
 	
 	echo "</table>\n";
@@ -227,7 +244,7 @@ $result = mysql_query ( $sql );
 if ($result !== false) {
 	// SELECT，SHOW，DESCRIBE, EXPLAIN 等 结果显示（测试可以）
 	if (gettype ( $result ) == 'resource') {
-		echo '为便于阅读，location等已被解码，再次使用请编码：& => %26, + => %2b<br />';
+		echo '为便于阅读，location等已被解码，再次使用请编码：& => %26, + => %2b<br />'."\n";
 		show_table_info ( $result );
 	}
 } else {
