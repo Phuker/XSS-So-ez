@@ -1,25 +1,24 @@
 #XSS So easy
 ##简介
 此网站用于XSS Cookie 劫持攻击中接收并储存Cookie。  
-适用于 PHP MySQL。  
+程序语言使用PHP，使用PDO扩展，请根据数据库正确安装；开发环境使用MySQL数据库，理论上PDO扩展支持各种数据库。
 
 ##使用方法
 ###安装配置
-1. 配置`config.php`，填写数据库用户名、密码等信息。  
-2. 访问`install.php`：创建数据库、表等操作。  
+1. 建议预先新建数据库用户，赋予最小权限。
+2. 配置`config.php`，填写数据库用户名、密码等信息。  
+3. 访问`install.php`：创建数据库、表等操作。
+4. 建议更改`config.php`文件权限为只能被HTTP服务程序读取，可以设置`style/color.css`可写。  
 
 ###使用  
 通过`write.php`，GET或者POST方法传输获取到的Cookie。  
 可供提交的参数为`domain location toplocation cookie opener`。其中`domain`必填。  
-含有payload：`p.js`。  
+含有payload：`p.php`。  
 
 ##附加功能
-各个页面的访问密码  
+各个页面的独立访问密码  
 自定义网站名称（title和页面中显示）  
-自定义开发者信息（底部显示）  
-
-##TODO
-PHP提醒，mysql_connect()函数以后会被抛弃。考虑改写成新版函数。  
+自定义开发者信息（底部显示）    
 
 ##Update
 ###2015-9-12 21:05:48
@@ -62,3 +61,7 @@ CSS文件已改为PHP文件读写。
   
 - `read.php`默认的倒序排序，增加删除键，调整样式  
 - 改进`backdoor.php`交互设计
+
+###2016年8月25日
+- 从已废弃的`mysql_connect()`系列函数更新到PDO扩展。  
+- 大量改进代码：验证密码部分整合成模块，payload `p.js`改为`p.php`,根据`config.php`动态生成。

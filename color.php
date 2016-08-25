@@ -1,42 +1,12 @@
 <?php
 require_once ('config.php');
-if ($color_pwd != '') {
-	if (! isset ( $_POST ['pwd'] ) or  $_POST ['pwd'] != $color_pwd) {
-		die ( '<!doctype html>
-<html>
-<head>
-<title>修改配色_' . $website_name . '</title>
-<meta charset="utf-8" />
-<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="style/color.css" />
-<link rel="stylesheet" type="text/css" href="style/main.css" />
-</head>
-<body>
-	<div class="select">
-		<h1>请输入密码</h1>
-			<form action="color.php" method="POST">
-			<input type="password" class="cmd" id="input_cmd" name="pwd" value="" autofocus="autofocus" />
-			<input type="submit" value="确定" />
-		</form>
-	</div>
-</body>
-</html>' );
-	}
-}
-require_once ('db.php');
-
-function filter($str) {
-	// 转义为HTML Entity
-	$str = trim ( htmlspecialchars ( $str, ENT_QUOTES ) );
-	$str = str_replace ( '\\', '&#92;', $str );
-	$str = str_replace ( '/', '&#47;', $str );
-	return $str;
-}
+require_once('func.inc.php');
+handlePwd($COLOR_PWD);
 ?>
 <!doctype html>
 <html>
 <head>
-<title>修改配色_<?php echo $website_name; ?></title>
+<title>修改配色_<?php echo $WEBSITE_NAME; ?></title>
 
 <meta charset="utf-8" />
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
@@ -64,9 +34,9 @@ function filter($str) {
 		}
 		</script>
 		<form
-			action="color.php<?php if(isset($_GET['pwd'])){echo '?pwd='. filter($_GET['pwd']);}?>"
+			action=""
 			id="formColor" onsubmit="return checkColor()" method="post">
-			<input type="hidden" name="pwd" value="<?php echo filter($_POST ['pwd']);?>">
+			<input type="hidden" name="pwd" value="<?php echo filter(@$_POST ['pwd']);?>">
 			<label for="color_black">
 				<div style="background-color: #000000" class="showcolor">
 					<input type="radio" name="color" id="color_black" value="black" />
@@ -161,7 +131,7 @@ function filter($str) {
 		}
 		?>
 		<p>
-			<a href="index.php">返回首页</a><br /><?php echo $dev_info;?></p>
+			<a href="index.php">返回首页</a><br /><?php echo $DEV_INFO;?></p>
 	</div>
 </body>
 </html>
