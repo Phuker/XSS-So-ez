@@ -17,7 +17,7 @@ $READ_PWD = '';
 $WRITE_PWD = ''; //注：如果设置了密码，请修改相应payload。
 $BACKDOOR_PWD = '';
 $COLOR_PWD = ''; //改变网站配色
-$INSTALL_PWD = 'i';
+$INSTALL_PWD = '';
 $TESTDB_PWD = '';
 
 // 网站名称

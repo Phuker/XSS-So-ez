@@ -52,10 +52,8 @@ function exeSql($sql) {
 	echo 'SQL命令:' . filter ( $sql ) . '<br/>';
 	$resultStmt = $DB->query ( $sql );
 	echo '命令执行完毕。<br/>';
-	// var_dump($result); //bool(true) or bool(false)
 	if ($resultStmt !== false) {
 		// SELECT，SHOW，DESCRIBE, EXPLAIN 等 结果显示（测试可以）
-		//var_dump($resultStmt);
 		$result = $resultStmt -> fetchAll(PDO::FETCH_ASSOC);
 		showTable ( $result);
 		echo '<span class="success">执行成功！影响的行数：' . count($result) . '</span><br/>';

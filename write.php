@@ -29,6 +29,5 @@ if (isset ( $_REQUEST ['domain'] ) && trim ( $_REQUEST ['domain'] ) != '') {
 		values (:time, :domain, :location, :toplocation, :cookie, :opener)";
 	$stmt = $DB->prepare($sql);
 	$result = $stmt->execute([':time'=>$time,':domain'=>$domain,':location'=>$location,':toplocation'=>$toplocation,':cookie'=>$cookie,':opener'=>$opener]);
-	//var_export($result);
 }
 ?>
