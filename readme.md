@@ -65,3 +65,4 @@ CSS文件已改为PHP文件读写。
 ###2016年8月25日
 - 从已废弃的`mysql_connect()`系列函数更新到PDO扩展。  
 - 大量改进代码：验证密码部分整合成模块，payload `p.js`改为`p.php`,根据`config.php`动态生成。
+- `color.php`将CSS数据与代码分离

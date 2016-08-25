@@ -56,15 +56,15 @@ $colorConfig = json_decode(file_get_contents('./style/colors/config.json'), True
 				foreach ($colorConfig as $color) {
 					if ($_POST['color'] === $color['name']){
 						$css = file_get_contents('./style/colors/' . $color['file']);
+						$f = fopen ( "style/color.css", "w" );
+						if ($f === false) {
+							echo '打开文件失败<br />';
+						} else {
+							fwrite ( $f, $css );
+							fclose ( $f );
+						}
 					}
 				}	
-			}
-			$f = fopen ( "style/color.css", "w" );
-			if ($f === false) {
-				echo '打开文件失败<br />';
-			} else {
-				fwrite ( $f, $css );
-				fclose ( $f );
 			}
 		}
 		?>
